@@ -1,0 +1,68 @@
+<template>
+    <div class="slds-scrollable" style="height:350px; min-height:350px;">
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped" aria-label="Cart Items">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Product">Product</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Sales Price">Sales Price</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Margin">Margin (%)</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={cartItems} for:item="x">
+                   <tr class="slds-hint-parent" key={x.Id}>
+                        <th data-label="Product Row" scope="row">
+                            {x.Name}    
+                        </th>
+                        <td>
+                            <div class="slds-truncate" title="Sales Price">
+                                <lightning-input 
+                                    type="number" 
+                                    name={x.Id}  
+                                    value={x.SalesPrice} 
+                                    formatter="currency" 
+                                    step="0.01"
+                                    data-id={x.Id}
+                                    onchange={updatePrice}
+                                    disabled={x.readonly}>
+                                </lightning-input>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate" title="Margin">
+                                <template if:true={x.Product2.Agency_Pricing__c}>
+                                    Agency
+                                </template>
+                                <template if:false={x.Product2.Agency_Pricing__c}>
+                                    <lightning-input 
+                                        type="number" 
+                                        name={x.Id}  
+                                        value={x.margin}
+                                        formatter="percent-fixed" 
+                                        step="0.01"
+                                        data-id={x.Id}
+                                        onchange={updateMargin}
+                                        disabled={x.readonly}>
+                                    </lightning-input>
+                                </template>
+                            </div>
+                        </td>
+                   </tr>
+                </template>   
+            </tbody>
+        </table>
+        <div class="slds-m-top_medium slds-align_absolute-center">
+            <lightning-button 
+                label="Save Changes"
+                onclick={saveChanges}
+                variant="brand">
+            </lightning-button>
+        </div>
+    </div>
+</template>
